@@ -5,7 +5,7 @@
 ### Project Title
 Bikeshare.py
 ### Description
-It is a Python code that import 'US bike share data' and answer the user questions about it.
+It is a Python code that import 'US bike share data' and answer the user questions by computing descriptive statistics.
 
 ### Files used
 chicago.csv
