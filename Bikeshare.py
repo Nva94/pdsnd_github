@@ -31,7 +31,7 @@ def get_filters():
 
     if day == '': day = 'all'
     if month == '' : month = 'all'
-      
+
 
     print('-'*40)
     return city, month, day, filters
@@ -52,8 +52,8 @@ def load_data(city, month, day):
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.weekday_name
-    df['hour'] = df['Start Time'].dt.hour 
-  
+    df['hour'] = df['Start Time'].dt.hour
+
     if month != 'all':
         months = ['january', 'february', 'march', 'april', 'may', 'june']
         month = months.index(month)+1
@@ -77,13 +77,19 @@ def display_data(df):
             start_loc+=5
             con_display= input("Do you wish to continue? type(yes/no)\n").lower()
     print('-'*40)
-    
+
 def time_stats(df , filters , city):
+    """
+    Use 3 agr:
+    df - DataFrame containing city data filtered
+    filters - what type of filter used
+    city - the city that we use it date
+    """
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
-  
+
     months = ['january', 'february', 'march', 'april', 'may', 'june']
-  
+
     if filters == 'no':
         print('No filter was selected for the {} data\n'.format(city.title()))
         common_month = df['month'].mode()[0]
@@ -92,16 +98,16 @@ def time_stats(df , filters , city):
         print('The most common month: {}'.format(months[common_month-1].title()))
         print('The most common day of week: {}'.format(common_day_of_week))
         print('The most common hour: {}\n'.format(common_hour_of_day))
-    
+
     if filters == 'both':
         print('{} data filtered by both month and day'.format(city.title))
         print()
         common_hour_of_day = df['hour'].mode()[0]
         m = df['month'].mode()[0]
         print('Month: {}    Day:{}\n'.format(months[m-1].title() , df['day_of_week'].mode()[0]))
-    
+
         print('The most common hour: {}\n'.format(common_hour_of_day))
-  
+
     if filters == 'month':
         ms = df['month'].mode()[0]
         print('{} data filtered by month\n'.format(city.title))
@@ -109,14 +115,14 @@ def time_stats(df , filters , city):
         common_day_of_week = df['day_of_week'].mode()[0]
         common_hour_of_day = df['hour'].mode()[0]
         print('The most common day of week: {}     The most common hour: {}\n'.format(common_day_of_week , common_hour_of_day))
-  
+
     if filters == 'day':
         print('{} data filtered by day\n'.format(city.title))
         print('The day: {}\n'.format(df['day_of_week'].mode()[0]))
         common_month = df['month'].mode()[0]
         common_hour_of_day = df['hour'].mode()[0]
         print('The most common month: {}     The most common hour: {}\n'.format(common_month , common_hour_of_day))
-            
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
@@ -137,9 +143,9 @@ def station_stats(df):
 
     # TO DO: display most frequent combination of start station and end station trip
     df['combination']=df['Start Station'] +'-'+df['End Station']
-  
+
     print('The most frequent combination of start station and end station trip: {}\n'.format(df['combination'].mode()[0]))
-  
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
@@ -153,7 +159,7 @@ def trip_duration_stats(df):
     total_sum = df['Trip Duration'].sum()
     aveg =  df['Trip Duration'].mean()
     print('The total travel time: {}     Average total time: {}      Count of travel time: {}\n'.format(total_sum ,aveg, count))
-  
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
@@ -181,10 +187,10 @@ def user_stats(df):
         print('Earliest year of birth: {}'.format(int(earliest)))
         common_year = df['Birth Year'].mode()[0]
         print('Most common year of birth: {}'.format(common_year))
-  
 
 
-    
+
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
