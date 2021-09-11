@@ -84,48 +84,56 @@ def display_data(df):
 
     print('-'*40)
 
-def time_stats(df , filters , city):
+def time_stats(df , filters):
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
 
     months = ['january', 'february', 'march', 'april', 'may', 'june']
 
     if filters == 'no':
-        print('No filter was selected for the {} data\n'.format(city.title()))
-        common_month = df['month'].mode()[0]
+        print('No filter was selected.\n')
+        print()
+        common_month = months[df['month'].mode()[0]-1].title()
         common_day_of_week = df['day_of_week'].mode()[0]
         common_hour_of_day = df['hour'].mode()[0]
-        print('The most common month: {}'.format(months[common_month-1].title()))
-        print('The most common day of week: {}'.format(common_day_of_week))
+
+        print('The most common month: {}\n'.format(common_month))
+        print('The most common day of week: {}\n'.format(common_day_of_week))
         print('The most common hour: {}\n'.format(common_hour_of_day))
 
     if filters == 'both':
-        print('{} data filtered by both month and day'.format(city.title))
-        print()
-        common_hour_of_day = df['hour'].mode()[0]
-        m = df['month'].mode()[0]
-        print('Month: {}    Day:{}\n'.format(months[m-1].title() , df['day_of_week'].mode()[0]))
+        print('The data filtered by both month and day.\n')
 
+        common_hour_of_day = df['hour'].mode()[0]
+        month = months[df['month'].mode()[0]-1].title()
+        day = df['day_of_week'].mode()[0]
+
+        print('Month: {}\nDay: {}\n'.format( month ,day ))
         print('The most common hour: {}\n'.format(common_hour_of_day))
 
     if filters == 'month':
-        ms = df['month'].mode()[0]
-        print('{} data filtered by month\n'.format(city.title))
-        print('Month: {}\n'.format(months[ms-1]))
+
+        print('The data filtered by month.\n')
+
+        month = months[df['month'].mode()[0]-1]
         common_day_of_week = df['day_of_week'].mode()[0]
         common_hour_of_day = df['hour'].mode()[0]
-        print('The most common day of week: {}     The most common hour: {}\n'.format(common_day_of_week , common_hour_of_day))
+
+        print('Month: {}\n'.format(month))
+        print('The most common day of week: {}\nThe most common hour: {}\n'.format(common_day_of_week , common_hour_of_day))
 
     if filters == 'day':
-        print('{} data filtered by day\n'.format(city.title))
-        print('The day: {}\n'.format(df['day_of_week'].mode()[0]))
-        common_month = df['month'].mode()[0]
+        print('The data filtered by day.\n')
+
+        day = df['day_of_week'].mode()[0]
+        common_month = months[df['month'].mode()[0]-1].title()
         common_hour_of_day = df['hour'].mode()[0]
-        print('The most common month: {}     The most common hour: {}\n'.format(common_month , common_hour_of_day))
+
+        print('Day: {}\n'.format(day))
+        print('The most common month: {}\nThe most common hour: {}\n'.format(common_month , common_hour_of_day))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
-
 
 def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
