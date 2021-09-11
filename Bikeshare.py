@@ -76,11 +76,12 @@ def display_data(df):
         view_data = input("Would you like to view 5 rows of individual trip data? Enter yes or no?\n")
     if view_data != 'no':
         start_loc = 0
-        con_display = ''
-        while con_display != 'no':
+        continue_display = ''
+        while continue_display != 'no':
             print(df.iloc[start_loc:start_loc+5])
             start_loc+=5
-            con_display= input("Do you wish to continue? type(yes/no)\n").lower()
+            continue_display= input("Do you wish to continue? type(yes/no)\n").lower()
+
     print('-'*40)
 
 def time_stats(df , filters , city):
