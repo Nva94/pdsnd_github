@@ -7,31 +7,36 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'washington': 'washington.csv' }
 
 def get_filters():
-    print('Hello! Let\'s explore some US bikeshare data!')
-    print()
+    print('Hello! Let\'s explore some US bikeshare data!\n')
     city = ''
     month = ''
     day =''
     while city not in ('chicago', 'new york' , 'washington'):
-        city = input('Would you like to see data for Chicago, New York, or Washingto?\n').lower()
+        city = input('Would you like to see data for Chicago, New York, or Washington?\n').lower()
+    print()
+
     filters = ''
     while filters not in ('month', 'day','both','no'):
-        filters = input('Would you like to filter the data by month, day, both or not? type(month/day/both/no)\n').lower()
-    if filters != 'no':
-        if filters == 'month' or filters =='both':
-            months = ['january', 'february', 'march', 'april', 'may', 'june']
-            while month not in (months):
-                month = input('Which month - January, February, March, April, May, or June?\n').lower()
-        if filters == 'day' or filters == 'both':
-            days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
-            while day not in (days):
-                day = input('Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday?\n').lower()
+        filters = input('Would you like to filter the data by month, day, both or not? Enter month, day, both, or no\n').lower()
+    print()
+
+    if filters == 'month' or filters =='both':
+        months = ['january', 'february', 'march', 'april', 'may', 'june']
+        while month not in (months):
+            month = input('Which month - January, February, March, April, May, or June?\n').lower()
+    print()
+
+    if filters == 'day' or filters == 'both':
+        days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+        while day not in (days):
+            day = input('Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday?\n').lower()
+    print()
+
     if filters == 'no':
         day , month = 'all','all'
 
     if day == '': day = 'all'
     if month == '' : month = 'all'
-
 
     print('-'*40)
     return city, month, day, filters
@@ -71,61 +76,64 @@ def display_data(df):
         view_data = input("Would you like to view 5 rows of individual trip data? Enter yes or no?\n")
     if view_data != 'no':
         start_loc = 0
-        con_display = ''
-        while con_display != 'no':
+        continue_display = ''
+        while continue_display != 'no':
             print(df.iloc[start_loc:start_loc+5])
             start_loc+=5
-            con_display= input("Do you wish to continue? type(yes/no)\n").lower()
+            continue_display= input("Do you wish to continue? type(yes/no)\n").lower()
+
     print('-'*40)
 
-def time_stats(df , filters , city):
-    """
-    Use 3 agr:
-    df - DataFrame containing city data filtered
-    filters - what type of filter used
-    city - the city that we use it date
-    """
+def time_stats(df , filters):
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
 
     months = ['january', 'february', 'march', 'april', 'may', 'june']
 
     if filters == 'no':
-        print('No filter was selected for the {} data\n'.format(city.title()))
-        common_month = df['month'].mode()[0]
+        print('No filter was selected.\n')
+        print()
+        common_month = months[df['month'].mode()[0]-1].title()
         common_day_of_week = df['day_of_week'].mode()[0]
         common_hour_of_day = df['hour'].mode()[0]
-        print('The most common month: {}'.format(months[common_month-1].title()))
-        print('The most common day of week: {}'.format(common_day_of_week))
+
+        print('The most common month: {}\n'.format(common_month))
+        print('The most common day of week: {}\n'.format(common_day_of_week))
         print('The most common hour: {}\n'.format(common_hour_of_day))
 
     if filters == 'both':
-        print('{} data filtered by both month and day'.format(city.title))
-        print()
-        common_hour_of_day = df['hour'].mode()[0]
-        m = df['month'].mode()[0]
-        print('Month: {}    Day:{}\n'.format(months[m-1].title() , df['day_of_week'].mode()[0]))
+        print('The data filtered by both month and day.\n')
 
+        common_hour_of_day = df['hour'].mode()[0]
+        month = months[df['month'].mode()[0]-1].title()
+        day = df['day_of_week'].mode()[0]
+
+        print('Month: {}\nDay: {}\n'.format( month ,day ))
         print('The most common hour: {}\n'.format(common_hour_of_day))
 
     if filters == 'month':
-        ms = df['month'].mode()[0]
-        print('{} data filtered by month\n'.format(city.title))
-        print('Month: {}\n'.format(months[ms-1]))
+
+        print('The data filtered by month.\n')
+
+        month = months[df['month'].mode()[0]-1]
         common_day_of_week = df['day_of_week'].mode()[0]
         common_hour_of_day = df['hour'].mode()[0]
-        print('The most common day of week: {}     The most common hour: {}\n'.format(common_day_of_week , common_hour_of_day))
+
+        print('Month: {}\n'.format(month))
+        print('The most common day of week: {}\nThe most common hour: {}\n'.format(common_day_of_week , common_hour_of_day))
 
     if filters == 'day':
-        print('{} data filtered by day\n'.format(city.title))
-        print('The day: {}\n'.format(df['day_of_week'].mode()[0]))
-        common_month = df['month'].mode()[0]
+        print('The data filtered by day.\n')
+
+        day = df['day_of_week'].mode()[0]
+        common_month = months[df['month'].mode()[0]-1].title()
         common_hour_of_day = df['hour'].mode()[0]
-        print('The most common month: {}     The most common hour: {}\n'.format(common_month , common_hour_of_day))
+
+        print('Day: {}\n'.format(day))
+        print('The most common month: {}\nThe most common hour: {}\n'.format(common_month , common_hour_of_day))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
-
 
 def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
@@ -136,14 +144,13 @@ def station_stats(df):
     # TO DO: display most commonly used start station
     start_station = df['Start Station'].mode()[0]
     print('Most common start station: {}\n'.format(start_station))
+
     # TO DO: display most commonly used end station
     end_station = df['End Station'].mode()[0]
     print('Most common end station: {}\n'.format(end_station))
 
-
     # TO DO: display most frequent combination of start station and end station trip
-    df['combination']=df['Start Station'] +'-'+df['End Station']
-
+    df['combination']=df['Start Station'] +" and "+df['End Station']
     print('The most frequent combination of start station and end station trip: {}\n'.format(df['combination'].mode()[0]))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -157,8 +164,9 @@ def trip_duration_stats(df):
 
     count = df['Trip Duration'].count()
     total_sum = df['Trip Duration'].sum()
-    aveg =  df['Trip Duration'].mean()
-    print('The total travel time: {}     Average total time: {}      Count of travel time: {}\n'.format(total_sum ,aveg, count))
+    mean =  df['Trip Duration'].mean()
+
+    print('The total travel time: {}\nAverage total time: {}\nCount of travel time: {}\n'.format(total_sum ,mean, count))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -172,27 +180,27 @@ def user_stats(df):
 
     # TO DO: Display counts of user type
     users = dict(df['User Type'].value_counts())
-    print('Count of user type')
-    for u, v in users.items():
-        print('{}: {}'.format(u,v))
+    print('Count of user type:\n')
+    for user, user_count in users.items():
+        print('{}: {}\n'.format(user, user_count))
+
     # TO DO: Display counts of gender
     if 'Gender' in df:
-        print('Count of each gender')
-        gender = dict(df['Gender'].value_counts())
-        for g, c in gender.items():
-            print('{}: {}'.format(g,c))
+        print('Count of each gender:\n')
+        genders = dict(df['Gender'].value_counts())
+        for gender, gender_count in genders.items():
+            print('{}: {}\n'.format(gender, gender_count))
+
     # TO DO: Display earliest, most recent, and most common year of birth
     if 'Birth Year' in df:
         earliest = max(df['Birth Year'])
-        print('Earliest year of birth: {}'.format(int(earliest)))
+        print('Earliest year of birth: {}\n'.format(int(earliest)))
         common_year = df['Birth Year'].mode()[0]
-        print('Most common year of birth: {}'.format(common_year))
-
-
-
+        print('Most common year of birth: {}\n'.format(int(common_year)))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
+
 
 
 def main():
@@ -200,7 +208,7 @@ def main():
         city, month, day, filters = get_filters()
         df = load_data(city, month, day)
         display_data(df)
-        time_stats(df, filters, city)
+        time_stats(df, filters)
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df)
